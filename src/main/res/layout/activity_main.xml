@@ -1,0 +1,135 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:elevation="6dp"
+        android:background="#b812537f"
+        android:orientation="vertical" >
+
+        <TextView android:text="    Get into the system.."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView1"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:textColor="#46e5f8ff"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+    </LinearLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/Rel1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/line1"
+        android:background="#ff2a9ac4"
+        >
+
+        <ImageView
+            android:id="@+id/applicon"
+            android:src="@drawable/appicon"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign In"
+            android:id="@+id/textView"
+            android:layout_below="@id/applicon"
+            android:layout_centerHorizontal="true"
+            android:textColor="#ffffff"
+            android:layout_marginTop="15dp"
+            android:textSize="40dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Member"
+            android:id="@+id/textView2"
+            android:layout_below="@id/textView"
+            android:layout_alignStart="@id/editText1"
+            android:layout_alignLeft="@id/editText1"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="#ff1b167f"
+            android:layout_marginTop="30dp"
+            android:textSize="20dp" />
+
+        <Spinner android:id="@+id/spin1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/textView2"
+            android:layout_alignBaseline="@id/textView2"
+            android:layout_marginLeft="10dp"
+            android:popupBackground="@android:color/holo_blue_dark"
+            android:scrollbars="none"
+            android:spinnerMode="dropdown"  />
+
+        <EditText
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText1"
+            android:layout_below="@id/textView2"
+            android:hint="Enter ID"
+            android:focusable="true"
+            android:textColorHighlight="#569df2f2"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/editbox"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            />
+
+        <EditText
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/editText2"
+            android:layout_below="@+id/editText1"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/editbox"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:hint="Password" />
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="Enter"
+            android:id="@+id/button"
+            android:layout_below="@id/editText2"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:onClick="Signin"
+            android:background="@drawable/custom_button" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:layout_below="@+id/button"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textSize="35dp" />
+
+    </RelativeLayout>
+</RelativeLayout>
+

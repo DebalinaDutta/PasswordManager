@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Password Locker</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_show_grid">ShowGrid</string>
+    <string name="title_activity_add">Personalized Management</string>
+    <string name="title_activity_view">ViewActivity</string>
+    <string name="title_activity_line_item">LineItem</string>
+    <string name="title_activity_detail_view">DetailView</string>
+    <string name="title_activity_grid_list_line_item">GridListLineItem</string>
+    <string name="title_activity_view_activity_backup">ViewActivityBackup</string>
+    <string name="title_activity_detail_view_backup">DetailViewBackup</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
