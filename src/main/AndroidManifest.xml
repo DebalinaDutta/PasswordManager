@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.debalina.personalpwm" >
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/appicon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <receiver
+            android:name=".MyReceiver"
+            android:exported="false"
+            android:process=":remote" >
+        </receiver>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ShowGrid"
+            android:label="@string/title_activity_show_grid"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.debalina.personalpwm.MainActivity" />
+        </activity>
+        <activity
+            android:name=".AddActivity"
+            android:label="@string/title_activity_add"
+            android:parentActivityName=".ShowGrid" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.debalina.personalpwm.ShowGrid" />
+        </activity>
+        <activity
+            android:name=".ViewActivity"
+            android:label="@string/title_activity_view"
+            android:parentActivityName=".ShowGrid"
+            android:windowSoftInputMode="stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:resource="@xml/searchable"
+                android:value="com.example.debalina.personalpwm.ShowGrid" />
+        </activity>
+        <activity
+            android:name=".LineItem"
+            android:label="@string/title_activity_line_item" >
+        </activity>
+        <activity
+            android:name=".DetailView"
+            android:label="@string/title_activity_detail_view"
+            android:theme="@style/MyFloatingWindow"
+            android:parentActivityName=".ViewActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.debalina.personalpwm.ViewActivity" />
+        </activity>
+        <activity
+            android:name=".GridListLineItem"
+            android:label="@string/title_activity_grid_list_line_item" >
+        </activity>
+
+    </application>
+
+</manifest>
