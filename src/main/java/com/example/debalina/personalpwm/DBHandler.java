@@ -510,4 +510,80 @@ public class DBHandler extends SQLiteOpenHelper {
         status = true;
         return status;
     }
+
+    //query with member only
+    public ArrayList<TableData> fetchTableData(String member) {
+
+        String query;
+
+//        query = "Select * FROM " + TABLE_CREDENTIALS + " WHERE " + COLUMN_NAME + " =  \"" + member + "\"";
+        query = "SELECT A." + COLUMN_ID + "," +
+                " A." + COLUMN_NAME + "," +
+                " A." + COLUMN_SUBJECT + "," +
+                " A." + COLUMN_USERID + "," +
+                " A." + COLUMN_PASSWORD + "," +
+                " B." + COLUMN_ID1 + "," +
+                " B." + COLUMN_PARENT + "," +
+                " B." + COLUMN_EFFDATE + "," +
+                " B." + COLUMN_DAYS + " FROM "
+                + TABLE_CREDENTIALS + " A, " + TABLE_RENEWAL + " B " + " WHERE A." +
+                COLUMN_NAME + " =  \"" + member + "\"" + " AND A." + COLUMN_ID + " = B." + COLUMN_PARENT
+                + " ORDER BY " + "A." + COLUMN_ID + ","
+                + " A." + COLUMN_NAME + ","
+                + " A." + COLUMN_SUBJECT + ","
+                + " A." + COLUMN_USERID + ","
+                + " A." + COLUMN_PASSWORD + ","
+                + " B." + COLUMN_ID1 + ","
+                + " B." + COLUMN_PARENT + ","
+                + " B." + COLUMN_EFFDATE + ","
+                + " B." + COLUMN_DAYS
+        ;
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ArrayList<TableData> tabledata = new ArrayList<TableData>();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            int id = cursor.getInt(cursor.getColumnIndex("_ID"));
+            String name = cursor.getString(cursor.getColumnIndex("NAME"));
+            String subject = cursor.getString(cursor.getColumnIndex("SUBJECT"));
+            String userID  = cursor.getString(cursor.getColumnIndex("USERID"));
+            String password  = cursor.getString(cursor.getColumnIndex("PASSWORD"));
+            int id1 = cursor.getInt(cursor.getColumnIndex("_ID1"));
+            int parent = cursor.getInt(cursor.getColumnIndex("PARENT"));
+            String effdate = cursor.getString(cursor.getColumnIndex("EFFDATE"));
+            int days = cursor.getInt(cursor.getColumnIndex("DAYS"));
+
+            TableData td = new TableData(id, name, subject, userID, password, id1, parent,
+                    effdate, days);
+
+            tabledata.add(td);
+
+            while(cursor.moveToNext()) {
+                id = cursor.getInt(cursor.getColumnIndex("_ID"));
+                name = cursor.getString(cursor.getColumnIndex("NAME"));
+                subject = cursor.getString(cursor.getColumnIndex("SUBJECT"));
+                userID = cursor.getString(cursor.getColumnIndex("USERID"));
+                password = cursor.getString(cursor.getColumnIndex("PASSWORD"));
+                id1 = cursor.getInt(cursor.getColumnIndex("_ID1"));
+                parent = cursor.getInt(cursor.getColumnIndex("PARENT"));
+                effdate = cursor.getString(cursor.getColumnIndex("EFFDATE"));
+                days = cursor.getInt(cursor.getColumnIndex("DAYS"));
+
+                td = new TableData(id, name, subject, userID, password, id1, parent,
+                        effdate, days);
+
+                tabledata.add(td);
+            }
+            cursor.close();
+        } else {
+            tabledata = null;
+        }
+        db.close();
+
+        return tabledata;
+    }
     }

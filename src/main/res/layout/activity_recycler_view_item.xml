@@ -1,0 +1,95 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.debalina.personalpwm.RecyclerViewItem">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rv"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView001"
+            android:layout_alignParentLeft="true"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView002"
+            android:layout_toRightOf="@id/textView001"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView003"
+            android:layout_toRightOf="@id/textView002"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView004"
+            android:layout_toRightOf="@id/textView003"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView005"
+            android:layout_toRightOf="@id/textView004"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView006"
+            android:layout_toRightOf="@id/textView005"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView007"
+            android:layout_toRightOf="@id/textView006"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView008"
+            android:layout_toRightOf="@id/textView007"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView009"
+            android:layout_toRightOf="@id/textView008"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>

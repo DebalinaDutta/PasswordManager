@@ -63,8 +63,8 @@
         <activity
             android:name=".DetailView"
             android:label="@string/title_activity_detail_view"
-            android:theme="@style/MyFloatingWindow"
-            android:parentActivityName=".ViewActivity" >
+            android:parentActivityName=".ViewActivity"
+            android:theme="@style/MyFloatingWindow" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.debalina.personalpwm.ViewActivity" />
@@ -73,7 +73,27 @@
             android:name=".GridListLineItem"
             android:label="@string/title_activity_grid_list_line_item" >
         </activity>
-
+        <activity
+            android:name=".tableView"
+            android:label="@string/title_activity_table_view"
+            android:parentActivityName=".ShowGrid" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.debalina.personalpwm.ShowGrid" />
+        </activity>
+        <activity
+            android:name=".validatePasscode"
+            android:label="@string/title_activity_validate_passcode"
+            android:parentActivityName=".ShowGrid"
+            android:theme="@style/MyFloatingWindow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.debalina.personalpwm.ShowGrid" />
+        </activity>
+        <activity
+            android:name=".RecyclerViewItem"
+            android:label="@string/title_activity_recycler_view_item" >
+        </activity>
     </application>
 
 </manifest>

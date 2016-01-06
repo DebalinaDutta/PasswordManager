@@ -33,6 +33,8 @@ public class ShowGrid extends Activity {
     String member;
     MemberCache memcas;
     int ACTIVITY_REQUEST_CODE = 1;
+    GridView gridview;
+    int posiTion;
 //    ArrayList<String> list = new ArrayList<String>();
 //    ListView listV;
 //    listAdapter dueAdapter;
@@ -68,12 +70,13 @@ public class ShowGrid extends Activity {
         createListView(member);
 
         //set up gridview
-        final GridView gridview = (GridView) findViewById(R.id.gridview);
+        gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(this));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
+                posiTion = position;
                 if (position == 0) {
                     Toast.makeText(ShowGrid.this, "Taking to Add screen", Toast.LENGTH_SHORT).show();
                     View iv = gridview.getChildAt(position);
@@ -87,19 +90,18 @@ public class ShowGrid extends Activity {
                     startActivity(intent, option.toBundle());
                 } else {
                     if (position == 1) {
-                        Toast.makeText(ShowGrid.this, "Taking to View screen", Toast.LENGTH_SHORT).show();
-                        View iv = gridview.getChildAt(position);
-                        iv.setTransitionName("test");
-                        final Intent intent = new Intent(ShowGrid.this, ViewActivity.class);
-                        //                       ActivityOptions  option = ActivityOptions.makeSceneTransitionAnimation(ShowGrid.this);
-                        ActivityOptions option = ActivityOptions.makeSceneTransitionAnimation(ShowGrid.this, iv, "test");
-                        if (member == null) {
-                            member = memcas.getmember();
-                        }
-                        intent.putExtra("member", member);
-                        startActivity(intent, option.toBundle());
+                        Intent intent = new Intent(ShowGrid.this, validatePasscode.class);
+                        intent.putExtra("result", member);
+                        startActivityForResult(intent, 2);
+                    } else {
+                    if (position == 2) {
+                        Intent intent = new Intent(ShowGrid.this, validatePasscode.class);
+                        intent.putExtra("result", member);
+                        startActivityForResult(intent, 3);
                     }
                 }
+                }
+
             }
         });
     }
@@ -233,7 +235,7 @@ public class ShowGrid extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 String member = data.getStringExtra("result");
                 createListView(member);
             }
@@ -241,8 +243,45 @@ public class ShowGrid extends Activity {
                 //Write your code if there's no result
             }
         }
-    }//onActivityResult
-
+        if (requestCode == 2) {
+            if (resultCode == Activity.RESULT_OK) {
+                String member = data.getStringExtra("result");
+                Toast.makeText(ShowGrid.this, "Taking to View screen", Toast.LENGTH_SHORT).show();
+                View iv = gridview.getChildAt(posiTion);
+                iv.setTransitionName("test");
+                final Intent intent = new Intent(ShowGrid.this, ViewActivity.class);
+                //                       ActivityOptions  option = ActivityOptions.makeSceneTransitionAnimation(ShowGrid.this);
+                ActivityOptions option = ActivityOptions.makeSceneTransitionAnimation(ShowGrid.this, iv, "test");
+                if (member == null) {
+                    member = memcas.getmember();
+                }
+                intent.putExtra("member", member);
+                startActivity(intent, option.toBundle());
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+        if (requestCode == 3) {
+            if (resultCode == Activity.RESULT_OK) {
+                String member = data.getStringExtra("result");
+                Toast.makeText(ShowGrid.this, "Taking to History screen", Toast.LENGTH_SHORT).show();
+                View iv = gridview.getChildAt(posiTion);
+                iv.setTransitionName("test");
+                final Intent intent = new Intent(ShowGrid.this, tableView.class);
+                //                       ActivityOptions  option = ActivityOptions.makeSceneTransitionAnimation(ShowGrid.this);
+                ActivityOptions option = ActivityOptions.makeSceneTransitionAnimation(ShowGrid.this, iv, "test");
+                if (member == null) {
+                    member = memcas.getmember();
+                }
+                intent.putExtra("member", member);
+                startActivity(intent, option.toBundle());
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }//onActivityResult
+    }
 
     public void refreshProcess (View view) {
 
