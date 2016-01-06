@@ -155,15 +155,15 @@ public class tableView extends Activity {
 
                 final TableData tabdata = mDisplayedValues.get(position);
 
-                holder.tv1.setText(tabdata.getID());
+                holder.tv1.setText(String.valueOf(tabdata.getID()));
                 holder.tv2.setText(tabdata.getname());
                 holder.tv3.setText(tabdata.getsubject());
                 holder.tv4.setText(tabdata.getuserid());
                 holder.tv5.setText(tabdata.getpassword());
-                holder.tv6.setText(tabdata.getID1());
-                holder.tv7.setText(tabdata.getparent());
+                holder.tv6.setText(String.valueOf(tabdata.getID1()));
+                holder.tv7.setText(String.valueOf(tabdata.getparent()));
                 holder.tv8.setText(tabdata.geteffdate());
-                holder.tv9.setText(tabdata.getdays());
+                holder.tv9.setText(String.valueOf(tabdata.getdays()));
             }
 
             // Return the size of your dataset (invoked by the layout manager)
