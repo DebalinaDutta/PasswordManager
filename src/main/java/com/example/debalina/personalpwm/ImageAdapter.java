@@ -59,6 +59,6 @@ public class ImageAdapter extends BaseAdapter {
     }; */
 
     private Integer[] mThumbIds = {
-            R.drawable.add, R.drawable.view, R.drawable.historyimages
+            R.drawable.add, R.drawable.view
             };
 }

@@ -262,7 +262,7 @@ public class ShowGrid extends Activity {
                 //Write your code if there's no result
             }
         }
-        if (requestCode == 3) {
+/*        if (requestCode == 3) {
             if (resultCode == Activity.RESULT_OK) {
                 String member = data.getStringExtra("result");
                 Toast.makeText(ShowGrid.this, "Taking to History screen", Toast.LENGTH_SHORT).show();
@@ -280,7 +280,7 @@ public class ShowGrid extends Activity {
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
             }
-        }//onActivityResult
+        }//onActivityResult  */
     }
 
     public void refreshProcess (View view) {
