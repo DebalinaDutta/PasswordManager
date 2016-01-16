@@ -2,8 +2,10 @@ package com.example.debalina.personalpwm;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -61,10 +63,8 @@ public class ViewActivity extends Activity {
     ArrayList<ContentData> list;
     ListView listView;
     String member;
-    int ACTIVITY_REQUEST_CODE;
-    String fileName;
-    File directory;
     File file;
+    int ACTIVITY_REQUEST_CODE;
     Button OpenExcelBtn;
 
     @Override
@@ -351,142 +351,40 @@ public class ViewActivity extends Activity {
         DBHandler dbhandler = new DBHandler(this, null, null, 1);
 
         ExcelDBCursor eXdBcRSR = dbhandler.fetchDataforDownload(member);
-        SQLiteDatabase db = eXdBcRSR.getdatabase();
-        Cursor cursor = eXdBcRSR.getcursor();
+        final SQLiteDatabase db = eXdBcRSR.getdatabase();
+        final Cursor cursor = eXdBcRSR.getcursor();
 
         if (cursor == null) {
             Toast.makeText(getApplicationContext(), "No data to download", Toast.LENGTH_LONG).show();
         } else {
-            downloadData(db, cursor);
-            OpenExcelBtn.setVisibility(View.VISIBLE);
-        }
+            //Show alert dialog
+            new AlertDialog.Builder(this)
+                    .setTitle("Save in Dropbox")
+                    .setMessage("Do you want to store the file in Dropbox?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Save to Dropbox
+                            OpenExcelBtn.setVisibility(View.VISIBLE);
 
-    }
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            SqliteToExcel sql2Excel = new SqliteToExcel();
+                            sqlite2ExcelResponse resp = sql2Excel.downloadData(db, cursor, member);
+                            if (resp.getSuccess() == true) {
+                                file = new File(resp.getdirectory(), resp.getfilename());
+                                String mesg = "Data downloaded as " + resp.getfilename() + " in the path: " + resp.getdirectory();
+                                Toast.makeText(getApplicationContext(), mesg, Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), resp.getmesg(), Toast.LENGTH_LONG).show();
+                            }
 
-    public void downloadData(SQLiteDatabase db, Cursor cursor) {
-
-        fileName = member + ".xls";
-
-        //check external storage state
-        String state = Environment.getExternalStorageState();
-
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            // We can read and write the media
-            writeExcel(db, cursor);
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            // We can only read the media
-            Toast.makeText(getApplicationContext(), "External storage Read Only", Toast.LENGTH_LONG).show();
-        } else {
-            // Something else is wrong. It may be one of many other states, but all we need
-            //  to know is we can neither read nor write
-            Toast.makeText(getApplicationContext(), "External storage not available", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void writeExcel(SQLiteDatabase db, Cursor cursor) {
-        //Saving file in external storage
-        File sdCard = Environment.getExternalStorageDirectory();
-        directory = new File(sdCard.getAbsolutePath() + "/" + member + ".pwd");
-
-        //Saving file in internal storage
-        //  directory = new File(getFilesDir().getAbsolutePath() + "/" + member + ".pwd");
-
-        //create directory if not exist
-        if (!directory.isDirectory()) {
-            directory.mkdirs();
-        }
-
-        //file path
-        file = new File(directory, fileName);
-
-        WorkbookSettings wbSettings = new WorkbookSettings();
-        wbSettings.setLocale(new Locale("en", "EN"));
-        WritableWorkbook workbook;
-
-        try {
-            workbook = Workbook.createWorkbook(file, wbSettings);
-            //Excel sheet name. 0 represents first sheet
-            WritableSheet sheet = workbook.createSheet("MyMemorables", 0);
-
-            try {
-                sheet.addCell(new Label(0, 0, "Seq No.")); // column and row
-                sheet.addCell(new Label(1, 0, "Partition"));
-                sheet.addCell(new Label(2, 0, "Item Name"));
-                sheet.addCell(new Label(3, 0, "UserID"));
-                sheet.addCell(new Label(4, 0, "Password"));
-                sheet.addCell(new Label(5, 0, "Secondary Sequence"));
-                sheet.addCell(new Label(6, 0, "Parent ID"));
-                sheet.addCell(new Label(7, 0, "Last PWD Changed"));
-                sheet.addCell(new Label(8, 0, "PWD Renews Days"));
-
-                if (cursor.moveToFirst()) {
-                    cursor.moveToFirst();
-                    String id = String.valueOf(cursor.getInt(cursor.getColumnIndex("_ID")));
-                    String partition = cursor.getString(cursor.getColumnIndex("NAME"));
-                    String itemName = cursor.getString(cursor.getColumnIndex("SUBJECT"));
-                    String userID = cursor.getString(cursor.getColumnIndex("USERID"));
-                    String password = cursor.getString(cursor.getColumnIndex("PASSWORD"));
-                    String id1 = String.valueOf(cursor.getInt(cursor.getColumnIndex("_ID1")));
-                    String parent = String.valueOf(cursor.getInt(cursor.getColumnIndex("PARENT")));
-                    String effdate = cursor.getString(cursor.getColumnIndex("EFFDATE"));
-                    String rDays = cursor.getString(cursor.getColumnIndex("DAYS"));
-
-                    int i = cursor.getPosition() + 1;
-
-                    sheet.addCell(new Label(0, i, id));
-                    sheet.addCell(new Label(1, i, partition));
-                    sheet.addCell(new Label(2, i, itemName));
-                    sheet.addCell(new Label(3, i, userID));
-                    sheet.addCell(new Label(4, i, password));
-                    sheet.addCell(new Label(5, i, id1));
-                    sheet.addCell(new Label(6, i, parent));
-                    sheet.addCell(new Label(7, i, effdate));
-                    sheet.addCell(new Label(8, i, rDays));
-
-                    while (cursor.moveToNext()) {
-                        id = String.valueOf(cursor.getInt(cursor.getColumnIndex("_ID")));
-                        partition = cursor.getString(cursor.getColumnIndex("NAME"));
-                        itemName = cursor.getString(cursor.getColumnIndex("SUBJECT"));
-                        userID = cursor.getString(cursor.getColumnIndex("USERID"));
-                        password = cursor.getString(cursor.getColumnIndex("PASSWORD"));
-                        id1 = String.valueOf(cursor.getInt(cursor.getColumnIndex("_ID1")));
-                        parent = String.valueOf(cursor.getInt(cursor.getColumnIndex("PARENT")));
-                        effdate = cursor.getString(cursor.getColumnIndex("EFFDATE"));
-                        rDays = cursor.getString(cursor.getColumnIndex("DAYS"));
-
-                        i = cursor.getPosition() + 1;
-
-                        sheet.addCell(new Label(0, i, id));
-                        sheet.addCell(new Label(1, i, partition));
-                        sheet.addCell(new Label(2, i, itemName));
-                        sheet.addCell(new Label(3, i, userID));
-                        sheet.addCell(new Label(4, i, password));
-                        sheet.addCell(new Label(5, i, id1));
-                        sheet.addCell(new Label(6, i, parent));
-                        sheet.addCell(new Label(7, i, effdate));
-                        sheet.addCell(new Label(8, i, rDays));
-                    }
-                    cursor.close();
-                }
-                db.close();
-
-                //closing cursor
-                cursor.close();
-            } catch (RowsExceededException e) {
-                e.printStackTrace();
-            } catch (WriteException e) {
-                e.printStackTrace();
-            }
-            workbook.write();
-            try {
-                workbook.close();
-                String mesg = "Data downloaded as " + fileName + " in the path: " + directory;
-                Toast.makeText(getApplicationContext(), mesg, Toast.LENGTH_LONG).show();
-            } catch (WriteException e) {
-                e.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+                            OpenExcelBtn.setVisibility(View.VISIBLE);
+                        }
+                    })
+                    .setIcon(R.drawable.alerticon)
+                    .show();
         }
 
     }
@@ -498,7 +396,6 @@ public class ViewActivity extends Activity {
         intent.setDataAndType(uri, "application/vnd.ms-excel");
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-
         try {
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
@@ -508,7 +405,6 @@ public class ViewActivity extends Activity {
 
     public void loadfromExcel(View view) {
 
-
         Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
         fileintent.setType("gagt/sdf");
         try {
@@ -517,38 +413,24 @@ public class ViewActivity extends Activity {
             Toast.makeText(ViewActivity.this, "No Application Available to Read Excel", Toast.LENGTH_LONG).show();
         }
 
-
     }
 
     public void receiveExcelData(Intent data) {
 
         String FilePath = data.getData().getPath();
-        try {
-            AssetManager am = this.getAssets();
-            InputStream inStream;
-            XSSFWorkbook wb = null;
-            try {
-                inStream = new FileInputStream(FilePath);
-                wb = new XSSFWorkbook(inStream);
-                inStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            XSSFSheet sheet1 = wb.getSheetAt(0);
+        Context context = getApplicationContext();
 
-            if (sheet1 == null) {
-                return;
+        ExcelToSqlite excel2Ssqlite = new ExcelToSqlite();
+        Excel2SqliteResponse resp = excel2Ssqlite.downloadFromExceltoSqlite(member, FilePath, context);
+
+        if (resp.getSuccess() == true) {
+            if (resp.mesg == "nothing") {
+                Toast.makeText(ViewActivity.this, "Blank excel found; data load failed", Toast.LENGTH_LONG).show();
             } else {
-                DBHandler dbhandler = new DBHandler(this, null, null, 1);
-                if (dbhandler.ExceltoSqlite(member, sheet1)) {
-                    Toast.makeText(ViewActivity.this, "Data loaded to database successfully", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(ViewActivity.this, "Data loading failed", Toast.LENGTH_LONG).show();
-                }
+                Toast.makeText(ViewActivity.this, resp.mesg, Toast.LENGTH_LONG).show();
             }
-
-        } catch (Exception ex) {
-
+        }else {
+            Toast.makeText(ViewActivity.this, resp.mesg, Toast.LENGTH_LONG).show();
         }
 
     }
