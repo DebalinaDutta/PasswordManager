@@ -503,7 +503,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 contentValues1.put(COLUMN_DAYS, row.getCell(6, Row.CREATE_NULL_AS_BLANK).getStringCellValue());
             }
 
-            db1.insert(TABLE_RENEWAL, null, contentValues);
+            db1.insert(TABLE_RENEWAL, null, contentValues1);
 
         }
         db1.close();
