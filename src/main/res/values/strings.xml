@@ -17,4 +17,5 @@
     <string name="title_activity_table_view">tableView</string>
     <string name="title_activity_validate_passcode">validatePasscode</string>
     <string name="title_activity_recycler_view_item">RecyclerViewItem</string>
+    <string name="title_activity_admin">AdminActivity</string>
 </resources>

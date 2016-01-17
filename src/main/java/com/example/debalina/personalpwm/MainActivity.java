@@ -183,7 +183,7 @@ public class MainActivity extends Activity {
             Boolean leapyear = (Integer.valueOf(effdateJ.substring(0, 3)) % 4 == 0);
             if (leapyear) {
                 daydiff = (366 - Integer.valueOf(effdateJ.substring(3, 6))) + Integer.valueOf(currdateJ.substring(3, 6));
-            }else{
+            } else {
                 daydiff = (365 - Integer.valueOf(effdateJ.substring(3, 6))) + Integer.valueOf(currdateJ.substring(3, 6));
 
             }
@@ -206,16 +206,47 @@ public class MainActivity extends Activity {
         calendar.set(Calendar.HOUR, 2);
         calendar.set(Calendar.MINUTE, 33);
         calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.AM_PM,Calendar.AM);
+        calendar.set(Calendar.AM_PM, Calendar.AM);
 
         Intent myIntent = new Intent(MainActivity.this, MyReceiver.class);
         myIntent.putStringArrayListExtra("members", messageList);
 
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 1, myIntent, PendingIntent.FLAG_ONE_SHOT);
 
-        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 //        alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (10 * 1000), pendingIntent);
 
+    }
+
+    public void openAdminPage(View view) {
+
+        final Intent intent = new Intent(this, validatePasscode.class);
+
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                final Intent intent1 = new Intent(this, AdminActivity.class);
+
+                startActivityForResult(intent1, 2);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+        if (requestCode == 2) {
+            if (resultCode == Activity.RESULT_OK) {
+
+            }
+        }
+        if (resultCode == Activity.RESULT_CANCELED) {
+            //Write your code if there's no result
+            Toast.makeText(getApplicationContext(), "No changes done in profile..", Toast.LENGTH_SHORT).show();
+        }
     }
 }

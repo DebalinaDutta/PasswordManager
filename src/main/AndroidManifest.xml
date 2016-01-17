@@ -94,6 +94,15 @@
             android:name=".RecyclerViewItem"
             android:label="@string/title_activity_recycler_view_item" >
         </activity>
+        <activity
+            android:name=".AdminActivity"
+            android:label="@string/title_activity_admin"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/MyFloatingWindow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.debalina.personalpwm.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
