@@ -29,6 +29,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "CredentialDB.db";
     private static final String TABLE_CREDENTIALS = "CREDENTIALS";
     private static final String TABLE_RENEWAL = "RENEWAL";
+    private static final String TABLE_ADMIN = "ADMIN";
 
     public static final String COLUMN_ID = "_ID";
     public static final String COLUMN_ID1 = "_ID1";
@@ -39,6 +40,9 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_PARENT = "PARENT";
     public static final String COLUMN_EFFDATE = "EFFDATE";
     public static final String COLUMN_DAYS = "DAYS";
+    public static final String COLUMN_MEMBER = "MEMBER";
+    public static final String COLUMN_VIEWPASSWORD = "VIEWPASSWORD";
+    public static final String COLUMN_EMAIL = "EMAIL";
 
     public DBHandler(Context context, String name,
                             SQLiteDatabase.CursorFactory factory, int version) {
@@ -57,10 +61,17 @@ public class DBHandler extends SQLiteOpenHelper {
         String CREATE_RENEWAL_TABLE = "CREATE TABLE " +
                 TABLE_RENEWAL + "(" + COLUMN_ID1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_PARENT
                 + " INTEGER, " + COLUMN_EFFDATE + " TEXT, " + COLUMN_DAYS + " INTEGER" + ","
-                + " FOREIGN KEY(" + COLUMN_ID1 + ")" + " REFERENCES " + TABLE_CREDENTIALS + "(" + COLUMN_ID
+                + " FOREIGN KEY(" + COLUMN_PARENT + ")" + " REFERENCES " + TABLE_CREDENTIALS + "(" + COLUMN_ID
                 + ")" + " ON DELETE CASCADE " + ")";
 
         db.execSQL(CREATE_RENEWAL_TABLE);
+
+        String CREATE_ADMIN_TABLE = "CREATE TABLE " +
+                TABLE_ADMIN + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MEMBER
+                + " TEXT, " + COLUMN_USERID + " TEXT, " + COLUMN_PASSWORD + " TEXT, " +
+                COLUMN_VIEWPASSWORD + " TEXT, " + COLUMN_EMAIL + " TEXT" + ")";
+
+        db.execSQL(CREATE_ADMIN_TABLE);
     }
 
     //Open database with FK on
@@ -586,4 +597,183 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return tabledata;
     }
+
+    //insert admin
+    public String saveAdmin (AccountProfile accountProfile) {
+
+        String operation_flag = "add";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // check if exists
+        Boolean ifExists = false;
+        String member = accountProfile.getmember();
+
+        ifExists = checkIfMemberExists(db, member);
+        if (ifExists) {
+            updateAdmin(db, accountProfile);
+            operation_flag = "update";
+        } else {
+            addAdmin(db, accountProfile);
+        }
+        return operation_flag;
     }
+
+    public void addAdmin(SQLiteDatabase db, AccountProfile ap) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_MEMBER, ap.getmember());
+        values.put(COLUMN_USERID, ap.getuserID());
+        values.put(COLUMN_PASSWORD, ap.getpassword());
+        values.put(COLUMN_VIEWPASSWORD, ap.getviewPassword());
+        values.put(COLUMN_EMAIL, ap.getemail());
+
+        db.insert(TABLE_ADMIN, null, values);
+
+        db.close();
+    }
+
+    //update admin
+    public void updateAdmin (SQLiteDatabase db, AccountProfile ap) {
+
+
+        ContentValues values = new ContentValues();
+       values.put(COLUMN_USERID, ap.getuserID());
+       values.put(COLUMN_PASSWORD, ap.getpassword());
+       values.put(COLUMN_VIEWPASSWORD, ap.getviewPassword());
+       values.put(COLUMN_EMAIL, ap.getemail());
+
+       db.update(TABLE_ADMIN, values, COLUMN_MEMBER + " = ?", new String[]{String.valueOf(ap.getmember())});
+
+       db.close();
+
+        }
+
+    public Boolean checkIfMemberExists (SQLiteDatabase db, String member) {
+
+        String Query = "Select * from " + TABLE_ADMIN + " where " + COLUMN_MEMBER + " =  \"" + member + "\"" ;
+
+        Cursor cursor = db.rawQuery(Query, null);
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }else{
+            cursor.close();
+            return true;
+        }
+
+    }
+
+    //delete profile
+    public boolean deleteProf (String member) {
+
+        boolean result = false;
+
+        String query = "Select * FROM " + TABLE_ADMIN + " WHERE " + COLUMN_MEMBER + " =  \"" + member + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        AccountProfile ap = new AccountProfile();
+
+        Boolean ifExists = checkIfMemberExists(db, member);
+
+        if (ifExists) {
+
+            if (cursor.moveToFirst()) {
+                ap.setmember(cursor.getString(cursor.getColumnIndex("MEMBER")));
+
+                db.delete(TABLE_ADMIN, COLUMN_MEMBER + " = ?",
+                        new String[]{String.valueOf(ap.getmember())});
+                cursor.close();
+            }
+            deleteCredsContent(db, member);
+
+            db.close();
+            result = true;
+        }
+        return result;
+    }
+
+    //delete
+    public void deleteCredsContent(SQLiteDatabase db, String member) {
+
+        String query = "Select * FROM " + TABLE_CREDENTIALS + " WHERE " + COLUMN_NAME + " =  \"" + member + "\"" ;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        ContentData content = new ContentData();
+
+        if (cursor.moveToFirst()) {
+            content.setname(cursor.getString(cursor.getColumnIndex("NAME")));
+            db.delete(TABLE_CREDENTIALS, COLUMN_NAME + " = ?",
+                    new String[]{String.valueOf(content.getname())});
+            cursor.close();
+        }
+    }
+
+    public ArrayList<String> fetchAccounts() {
+
+        ArrayList<String> list = new ArrayList<String>();
+
+        String query = "Select * FROM " + TABLE_ADMIN ;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            String account = cursor.getString(cursor.getColumnIndex("MEMBER"));
+
+            list.add(account);
+
+            while(cursor.moveToNext()) {
+                account = cursor.getString(cursor.getColumnIndex("MEMBER"));
+                list.add(account);
+            }
+            cursor.close();
+        } else {
+            list = null;
+        }
+        db.close();
+        return list;
+    }
+
+    public AccountProfile getAccountProfile(String member) {
+
+        String userID = "";
+        String password = "";
+        String viewpassword = "";
+        String email = "";
+
+        String query = "Select " + COLUMN_MEMBER + ", " + COLUMN_USERID + ", " +
+                                    COLUMN_PASSWORD + ", " + COLUMN_VIEWPASSWORD + ", " +
+                                    COLUMN_EMAIL  +
+                        " FROM " + TABLE_ADMIN +
+                        " WHERE " + COLUMN_MEMBER + " =  \"" + member + "\"";
+
+
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+
+                userID = cursor.getString(cursor.getColumnIndex("USERID"));
+                password  = cursor.getString(cursor.getColumnIndex("PASSWORD"));
+                viewpassword = cursor.getString(cursor.getColumnIndex("VIEWPASSWORD"));
+                email = cursor.getString(cursor.getColumnIndex("EMAIL"));
+            }
+
+        AccountProfile acProf = new AccountProfile(member, userID, password, viewpassword, email);
+
+        return acProf;
+    }
+
+}
+

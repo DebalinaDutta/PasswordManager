@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="500dp"
+    android:layout_height="500dp"
+    tools:context="com.example.debalina.personalpwm.validatePasscode">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberPassword"
+        android:ems="12"
+        android:maxLength="9"
+        android:id="@+id/editText"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:hint="Enter 6 byte passcode" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter"
+        android:id="@+id/button1"
+        android:layout_below="@id/editText"
+        android:layout_marginTop="15dp"
+        android:layout_alignStart="@id/editText"
+        android:onClick="gotoListpage"
+        android:background="@drawable/custom_button" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Goback"
+        android:id="@+id/button2"
+        android:layout_toRightOf="@id/button1"
+        android:layout_marginLeft="10dp"
+        android:layout_alignBaseline="@id/button1"
+        android:onClick="goBack"
+        android:background="@drawable/custom_button" />
+
+
+</RelativeLayout>

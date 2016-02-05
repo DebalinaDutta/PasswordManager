@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -97,6 +98,24 @@
         <activity
             android:name=".AdminActivity"
             android:label="@string/title_activity_admin"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/MyFloatingWindow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.debalina.personalpwm.MainActivity" />
+        </activity>
+        <activity
+            android:name=".eMailActivity"
+            android:label="@string/title_activity_e_mail"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/MyFloatingWindow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.debalina.personalpwm.MainActivity" />
+        </activity>
+        <activity
+            android:name=".validateAdminPasscode"
+            android:label="@string/title_activity_validate_admin_passcode"
             android:parentActivityName=".MainActivity"
             android:theme="@style/MyFloatingWindow" >
             <meta-data

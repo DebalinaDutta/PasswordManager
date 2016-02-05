@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="500dp"
-    android:layout_height="500dp"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="750dp"
+    android:layout_height="750dp"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -9,15 +9,30 @@
     tools:context=".AdminActivity">
     >
 
-        <EditText
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:text="Account setup"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:textColor="#ff1b167f"
+        />
+
+    <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView1"
-            android:hint="Subject: "
+            android:hint="Profile: "
+            android:layout_below="@id/textView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:textSize="20dp"
+            android:textStyle="bold"
             android:textColor="#ff1b167f"
             />
 
@@ -51,7 +66,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView4"
+        android:inputType="number"
+        android:maxLength="6"
         android:layout_below="@id/textView3"
+        android:hint="Data view password: "
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp"
+        android:textColor="#ff1b167f"
+        android:textStyle="bold"
+        android:textSize="20dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:layout_below="@id/textView4"
         android:hint="Email Id: "
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -65,7 +95,7 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:id="@+id/button1"
-        android:layout_below="@id/textView4"
+        android:layout_below="@id/textView5"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="30dp"
@@ -75,12 +105,23 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="Goback"
         android:id="@+id/button2"
         android:layout_toRightOf="@id/button1"
         android:layout_alignBaseline="@id/button1"
         android:layout_marginLeft="20dp"
         android:onClick="cancelSave"
+        android:background="@drawable/custom_button" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/button3"
+        android:layout_below="@id/button1"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:onClick="deleteProfile"
         android:background="@drawable/custom_button" />
 
     </RelativeLayout>

@@ -47,4 +47,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.+'
     //for FAB library
     compile 'com.android.support:design:23.0.1'
+    //files for sending mail from Gmail
+    compile files('libs/activation.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/mail.jar')
 }
