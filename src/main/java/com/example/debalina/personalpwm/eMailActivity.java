@@ -76,10 +76,10 @@ public class eMailActivity extends Activity {
             String email = acProf.getemail();
 
             try {
-                GMailSender sender = new GMailSender("suvoapp@gmail.com", "Sherlock@1");
+                GMailSender sender = new GMailSender("xxxx@gmail.com", "xxxxxx");
                 sender.sendMail("Password Locker credentials for Account - " + member,
                         "User ID: " + userID + ", " + "Password: " + password + ", " + "View password: " + viewpassword,
-                        "suvoapp@gmail.com",
+                        "xxxx@gmail.com",
                         email);
                 sentFlag = "yes";
             } catch (Exception e) {
