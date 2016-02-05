@@ -54,16 +54,7 @@ public class MainActivity extends Activity {
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         actionBar.setTitle(Html.fromHtml("<font color='#ff0000'>Password Locker</font>"));
 
-        // Spinner population logic
-        list = new ArrayList<String>();
-        list.add("Debalina");
-        list.add("Suvojit");
-
-        Spinner spinner = (Spinner) findViewById(R.id.spin1);
-        ArrayAdapter<String> adp1 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_dropdown_item, list);
-        adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adp1);
+        loadSpinner();
 
         raiseAlarm(list);
     }
@@ -103,10 +94,14 @@ public class MainActivity extends Activity {
         EditText et2 = (EditText) findViewById(R.id.editText2);
         String pwd = et2.getText().toString();
 
-        String u = "admin";
-        String p = "admin";
+        //get user id and password for the Account
+        DBHandler dbhandler = new DBHandler(MainActivity.this, null, null, 1);
+        AccountProfile actProf = dbhandler.getAccountProfile(member);
 
-        if ((userID.equals(u)) && (pwd.equals(p))) {
+        String SavedU = actProf.getuserID();
+        String SavedP = actProf.getpassword();
+
+        if ((userID.equals(SavedU)) && (pwd.equals(SavedP))) {
             et1.setText("");
             et2.setText("");
             final Intent intent = new Intent(this, ShowGrid.class);
@@ -114,7 +109,7 @@ public class MainActivity extends Activity {
             intent.putExtra("member", member);
             startActivity(intent, option.toBundle());
         } else {
-            Toast.makeText(getApplicationContext(), "invalid..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "invalid Login entered..", Toast.LENGTH_SHORT).show();
             et1.requestFocus();
         }
     }
@@ -221,7 +216,7 @@ public class MainActivity extends Activity {
 
     public void openAdminPage(View view) {
 
-        final Intent intent = new Intent(this, validatePasscode.class);
+        final Intent intent = new Intent(this, validateAdminPasscode.class);
 
         startActivityForResult(intent, 1);
     }
@@ -240,13 +235,62 @@ public class MainActivity extends Activity {
             }
         }
         if (requestCode == 2) {
-            if (resultCode == Activity.RESULT_OK) {
-
+/*            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getApplicationContext(), "Click REFRESH to see the changes if made any..", Toast.LENGTH_LONG).show();
+            } */
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                loadSpinner();
             }
         }
-        if (resultCode == Activity.RESULT_CANCELED) {
-            //Write your code if there's no result
-            Toast.makeText(getApplicationContext(), "No changes done in profile..", Toast.LENGTH_SHORT).show();
+        if (requestCode == 3) {
+/*            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getApplicationContext(), "Click REFRESH to see the changes if made any..", Toast.LENGTH_LONG).show();
+            } */
+            if (resultCode == Activity.RESULT_OK) {
+                //Write your code if there's no result
+                String mailSent = data.getStringExtra("returnString");
+
+                if (mailSent.equals("yes")) {
+                    Toast.makeText(getApplicationContext(), "Message sent to registered email address", Toast.LENGTH_SHORT).show();
+                }else{
+                Toast.makeText(getApplicationContext(), "Message sending failed", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+
         }
+    }
+
+    public void loadSpinner() {
+
+        // Spinner population logic
+        DBHandler dbhandlr = new DBHandler(this, null, null, 1);
+        list = dbhandlr.fetchAccounts();
+
+        if (list == null) {
+            Toast.makeText(getApplicationContext(), "No Accounts exist, please create Accounts", Toast.LENGTH_SHORT).show();
+        } else {
+            Spinner spinner = (Spinner) findViewById(R.id.spin1);
+
+            ArrayAdapter<String> adp1 = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_dropdown_item, list);
+            adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adp1);
+        }
+    }
+
+    public void sendMail (View view) {
+
+        Spinner spinner1 = (Spinner) findViewById(R.id.spin1);
+        String member = spinner1.getSelectedItem().toString();
+
+        final Intent intent = new Intent(this, eMailActivity.class);
+        intent.putExtra("recipientAccount", member);
+        Toast.makeText(getApplicationContext(), "Sending message....", Toast.LENGTH_SHORT).show();
+        startActivityForResult(intent, 3);
     }
 }

@@ -93,7 +93,7 @@ public class ViewActivity extends Activity {
 
         //Setup text bar
         TextView tv = (TextView) findViewById(R.id.textView1);
-        tv.setText("    Hi " + member + ", " + "see details");
+        tv.setText("        List Credentials for " + member);
         tv.setTextColor(Color.BLACK);
 
         ImageView image = (ImageView) findViewById(R.id.icon1);

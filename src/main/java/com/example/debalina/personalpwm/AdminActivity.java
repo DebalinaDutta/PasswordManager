@@ -2,6 +2,8 @@ package com.example.debalina.personalpwm;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class AdminActivity extends Activity {
@@ -65,4 +72,181 @@ public class AdminActivity extends Activity {
         setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
     }
+
+    public void saveProcess (View view) {
+
+        Boolean error_flag = false;
+        String member = "";
+        String userID = "";
+        String password = "";
+        String Vpassword = "";
+        String email = "";
+
+        EditText et1 = (EditText) findViewById(R.id.textView1);
+        member = et1.getText().toString();
+        if ((member.equals(null)) || (member.isEmpty()) || (member.trim().isEmpty())) {
+            et1.requestFocus();
+            error_flag = true;
+            Toast.makeText(getApplicationContext(), "Enter profile", Toast.LENGTH_LONG).show();
+        }
+        if (error_flag == false) {
+            EditText et2 = (EditText) findViewById(R.id.textView2);
+            userID = et2.getText().toString();
+            if ((userID.equals(null)) || (userID.isEmpty()) || (userID.trim().isEmpty())) {
+                Toast.makeText(getApplicationContext(), "Enter User ID", Toast.LENGTH_LONG).show();
+                et2.requestFocus();
+                error_flag = true;
+            }
+        }
+        if (error_flag == false) {
+            EditText et3 = (EditText) findViewById(R.id.textView3);
+            password = et3.getText().toString();
+            if ((password.equals(null)) || (password.isEmpty()) || (password.trim().isEmpty())) {
+                Toast.makeText(getApplicationContext(), "Enter password", Toast.LENGTH_LONG).show();
+                et3.requestFocus();
+                error_flag = true;
+            } else {
+                if (!passwordIsValid(password)) {
+                    Toast.makeText(getApplicationContext(), "Password must be 6 character long with atleast one " +
+                            "alphabet in upper case, one in lower case, one number and one special character",
+                            Toast.LENGTH_LONG).show();
+                    error_flag = true;
+                    et3.requestFocus();
+
+                }
+            }
+
+        }
+        if (error_flag == false) {
+            EditText et4 = (EditText) findViewById(R.id.textView4);
+            Vpassword = et4.getText().toString();
+            if ((Vpassword.equals(null)) || (Vpassword.isEmpty()) || (Vpassword.trim().isEmpty())) {
+                Toast.makeText(getApplicationContext(), "Enter view password", Toast.LENGTH_LONG).show();
+                et4.requestFocus();
+                error_flag = true;
+            }else {
+                validatePassword vp = new validatePassword();
+                //validate numeric passcode with six digits length; use type 1
+                if (!vp.validatePWD(Vpassword, 1)) {
+                    Toast.makeText(getApplicationContext(), "View password invalid; must be 6 digits", Toast.LENGTH_LONG).show();
+                    error_flag = true;
+                    et4.requestFocus();
+                }
+
+                }
+            }
+
+
+        if (error_flag == false) {
+            EditText et5 = (EditText) findViewById(R.id.textView5);
+            email = et5.getText().toString();
+            if ((email.equals(null)) || (email.isEmpty()) || (email.trim().isEmpty())) {
+                Toast.makeText(getApplicationContext(), "Enter email ID", Toast.LENGTH_LONG).show();
+                et5.requestFocus();
+                error_flag = true;
+            }else {
+                if (!emailIsValid(email)) {
+                    Toast.makeText(getApplicationContext(), "Invalid email Id", Toast.LENGTH_LONG).show();
+                    error_flag = true;
+                    et5.requestFocus();
+                }
+
+            }
+        }
+
+//save data in database via AccountProfile object
+        if (error_flag == false) {
+
+            AccountProfile accountProfile = new AccountProfile(member, userID, password, Vpassword, email);
+
+            DBHandler dbhandler = new DBHandler(this, null, null, 1);
+            String operation_flag = dbhandler.saveAdmin(accountProfile);
+
+            if (operation_flag == "update") {
+                Toast.makeText(getApplicationContext(), "Existing profile updated", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "New profile created", Toast.LENGTH_LONG).show();
+            }
+        }
+
+/*        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish(); */
+
+        }
+
+    public Boolean passwordIsValid(String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}$";
+
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+    }
+
+    private Boolean emailIsValid(String email) {
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+
+    }
+
+    public void deleteProfile (View view) {
+
+        //Show alert dialog
+        final String member;
+ //       final Boolean error_flag = false;
+
+        EditText et1 = (EditText) findViewById(R.id.textView1);
+        member = et1.getText().toString();
+        if ((member.equals(null)) || (member.isEmpty()) || (member.trim().isEmpty())) {
+            et1.requestFocus();
+//            error_flag = true;
+            Toast.makeText(getApplicationContext(), "Enter profile", Toast.LENGTH_LONG).show();
+
+        } else {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete entry")
+                    .setMessage("Are you sure you want to delete this entry?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with delete
+                            //
+                            //delete selected profile
+//                            if (error_flag == false) {
+
+                                DBHandler dbhandler = new DBHandler(AdminActivity.this, null, null, 1);
+                                Boolean delete_result = dbhandler.deleteProf(member);
+
+                                if (delete_result == true) {
+                                    Toast.makeText(getApplicationContext(), "Profile deleted", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Profile does not exist", Toast.LENGTH_LONG).show();
+                                }
+//                            }
+                        }
+                    })
+
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(R.drawable.alerticon)
+                    .show();
+
+/*        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish(); */
+        }
+    }
+
 }

@@ -18,4 +18,6 @@
     <string name="title_activity_validate_passcode">validatePasscode</string>
     <string name="title_activity_recycler_view_item">RecyclerViewItem</string>
     <string name="title_activity_admin">AdminActivity</string>
+    <string name="title_activity_e_mail">eMailActivity</string>
+    <string name="title_activity_validate_admin_passcode">validateAdminPasscode</string>
 </resources>

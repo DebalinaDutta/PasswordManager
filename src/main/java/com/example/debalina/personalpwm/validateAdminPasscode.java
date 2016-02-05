@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class validatePasscode extends Activity {
+public class validateAdminPasscode extends Activity {
 
     String member;
 
@@ -79,8 +79,8 @@ public class validatePasscode extends Activity {
         validatePassword vp = new validatePassword();
         //validate numeric passcode with six digits length; use type 1
         if (vp.validatePWD(passcodeS, 1)) {
-            Integer pcode = getViewPassword(member);
-            if (passcode == pcode) {
+
+            if (passcode == 241407) {
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result", member);
@@ -88,25 +88,25 @@ public class validatePasscode extends Activity {
                 finish();
 
             } else {
-                Toast.makeText(validatePasscode.this, "Invalid Passcode", Toast.LENGTH_SHORT).show();
+                Toast.makeText(validateAdminPasscode.this, "Invalid Passcode", Toast.LENGTH_SHORT).show();
             }
         }else{
-            Toast.makeText(validatePasscode.this, "Passcode must be of 6 digits", Toast.LENGTH_SHORT).show();
+            Toast.makeText(validateAdminPasscode.this, "Passcode must be of 6 digits", Toast.LENGTH_SHORT).show();
         }
 
 
     }
 
     public void goBack (View v) {
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra("result",member);
-            setResult(Activity.RESULT_CANCELED,returnIntent);
-            finish();
-        }
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("result",member);
+        setResult(Activity.RESULT_CANCELED,returnIntent);
+        finish();
+    }
 
     public int getViewPassword(String member) {
 
-        DBHandler dbhandler = new DBHandler(validatePasscode.this, null, null, 1);
+        DBHandler dbhandler = new DBHandler(validateAdminPasscode.this, null, null, 1);
         AccountProfile acProf = dbhandler.getAccountProfile(member);
 
         String viewpassword = acProf.getviewPassword();
