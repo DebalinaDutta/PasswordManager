@@ -49,8 +49,8 @@ public class DetailView extends Activity {
 
         member = name;
 
-        EditText et1 = (EditText) findViewById(R.id.editText1);
-        et1.setText(subject);
+        TextView tv1 = (TextView) findViewById(R.id.tv1);
+        tv1.setText(subject);
         EditText et2 = (EditText) findViewById(R.id.editText2);
         et2.setText(userid);
         EditText et3 = (EditText) findViewById(R.id.editText3);
@@ -63,7 +63,7 @@ public class DetailView extends Activity {
 */
         //Setup text bar
         TextView tv = (TextView) findViewById(R.id.textView1);
-        tv.setText("     Hi " + name + ", " + "see details");
+        tv.setText("     Change Credentials for " + member);
         tv.setTextColor(Color.BLACK);
     }
 
