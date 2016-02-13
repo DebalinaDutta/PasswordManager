@@ -76,7 +76,7 @@ public class eMailActivity extends Activity {
             String email = acProf.getemail();
 
             try {
-                GMailSender sender = new GMailSender("xxxx@gmail.com", "xxxxxx");
+                GMailSender sender = new GMailSender("xxxx@gmail.com", "xxxx");
                 sender.sendMail("Password Locker credentials for Account - " + member,
                         "User ID: " + userID + ", " + "Password: " + password + ", " + "View password: " + viewpassword,
                         "xxxx@gmail.com",

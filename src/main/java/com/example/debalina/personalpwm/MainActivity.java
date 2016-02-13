@@ -56,7 +56,9 @@ public class MainActivity extends Activity {
 
         loadSpinner();
 
-        raiseAlarm(list);
+        if (list != null) {
+            raiseAlarm(list);
+        }
     }
 
     @Override
@@ -272,10 +274,12 @@ public class MainActivity extends Activity {
         list = dbhandlr.fetchAccounts();
 
         if (list == null) {
-            Toast.makeText(getApplicationContext(), "No Accounts exist, please create Accounts", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No Accounts exist, please create Accounts", Toast.LENGTH_LONG).show();
+            Spinner spinner = (Spinner) findViewById(R.id.spin1);
+            spinner.setVisibility(View.INVISIBLE);
         } else {
             Spinner spinner = (Spinner) findViewById(R.id.spin1);
-
+            spinner.setVisibility(View.VISIBLE);
             ArrayAdapter<String> adp1 = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_dropdown_item, list);
             adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
