@@ -61,9 +61,7 @@ The ‘official’ Account may contain many credentials given by the subject nam
 Credential management Workflow model – 
 
 
-
-
-
+https://github.com/svjt78/PasswordLocker/files/129978/PasswordLockerWorkflow.docx
 
 Credential management and change notifications -
 Credentials within a given Account can be created, updated or deleted.  
