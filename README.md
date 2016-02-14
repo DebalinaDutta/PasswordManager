@@ -94,7 +94,7 @@ Source code -
 https://github.com/svjt78/PasswordLocker
 
 Detail features –
-As attached
+https://github.com/svjt78/PasswordLocker/files/129976/PasswordLockerFeatures.docx
 
 
 
