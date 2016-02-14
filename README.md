@@ -58,7 +58,7 @@ The ‘official’ Account may contain many credentials given by the subject nam
 
 
 
-Credential management Workflow– 
+Credential management Workflow model – 
 
 
 
