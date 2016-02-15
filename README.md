@@ -84,10 +84,6 @@ Password validity period
 
 (Integration to Dropbox is still under development)
 
-Source code -
-
-https://github.com/svjt78/PasswordLocker
-
 Detail features –
 https://github.com/svjt78/PasswordLocker/files/129976/PasswordLockerFeatures.docx
 
