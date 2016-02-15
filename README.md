@@ -33,10 +33,7 @@ How it works:
 
 Account and Credential – 
 
-
-
-
-
+https://github.com/svjt78/PasswordLocker/files/129996/Accounts.and.Credentials.docx
 
 Account management – 
 An Account is a like a container for Credentials.  One Account can have many credentials associated to it.  The Credentials for one Account would remain logically partitioned from the Credentials of other Accounts.  Multiple Accounts can be created. Multiple Credentials, given by Subject names, can be created within an Account.
