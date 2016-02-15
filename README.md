@@ -31,7 +31,7 @@ Among other features, the App provides clean and easy-to-follow UIs with Materia
 
 How it works:
 
-Account and Credential – 
+Account and Credential are explained in pictoral representation as in the linked diagram below – 
 
 https://github.com/svjt78/PasswordLocker/files/129996/Accounts.and.Credentials.docx
 
@@ -55,7 +55,7 @@ The ‘official’ Account may contain many credentials given by the subject nam
 
 
 
-Credential management Workflow model – 
+Credential management Workflow model is schematically shown in the linked diagram below – 
 
 
 https://github.com/svjt78/PasswordLocker/files/129978/PasswordLockerWorkflow.docx
