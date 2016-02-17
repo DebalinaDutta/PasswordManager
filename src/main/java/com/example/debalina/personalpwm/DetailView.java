@@ -57,10 +57,10 @@ public class DetailView extends Activity {
         et3.setText(password);
 
         //        Set the ActionBar
- /*       ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         actionBar.setTitle(Html.fromHtml("<font color='#ff0000'>Password Locker</font>"));
-*/
+
         //Setup text bar
         TextView tv = (TextView) findViewById(R.id.textView1);
         tv.setText("     Change Credentials for " + member);
@@ -99,8 +99,8 @@ public class DetailView extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
   //
-                    EditText et = (EditText) findViewById(R.id.editText1);
-                        String subject = et.getText().toString();
+                        TextView tv1 = (TextView) findViewById(R.id.tv1);
+                        String subject = tv1.getText().toString();
                         DBHandler dbHandler = new DBHandler(DetailView.this, null, null, 1);
                         Boolean result = dbHandler.deleteCreds(member, subject);
                         if (result) {
@@ -133,8 +133,8 @@ public class DetailView extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
                         //
-                        EditText et1 = (EditText) findViewById(R.id.editText1);
-                        String subject = et1.getText().toString();
+                        TextView tv2 = (TextView) findViewById(R.id.tv1);
+                        String subject = tv2.getText().toString();
                         EditText et2 = (EditText) findViewById(R.id.editText2);
                         String userid = et2.getText().toString();
                         EditText et3 = (EditText) findViewById(R.id.editText3);
