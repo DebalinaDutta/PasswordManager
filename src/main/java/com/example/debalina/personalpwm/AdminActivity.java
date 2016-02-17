@@ -165,7 +165,9 @@ public class AdminActivity extends Activity {
                 et3.requestFocus();
                 error_flag = true;
             } else {
-                if (!passwordIsValid(password)) {
+                validatePassword vp = new validatePassword();
+                //validate passcode with six digits length, Uppercase & lowercase letter, number and special char; use type 2
+                if (!vp.validatePWD(password, 2)) {
                     Toast.makeText(getApplicationContext(), "Password must be 6 character long with atleast one " +
                             "alphabet in upper case, one in lower case, one number and one special character",
                             Toast.LENGTH_LONG).show();
@@ -199,6 +201,8 @@ public class AdminActivity extends Activity {
         if (error_flag == false) {
             EditText et5 = (EditText) findViewById(R.id.textView5);
             email = et5.getText().toString();
+            email = email.trim();
+//            email.replaceFirst("\\s+$", "");
             if ((email.equals(null)) || (email.isEmpty()) || (email.trim().isEmpty())) {
                 Toast.makeText(getApplicationContext(), "Enter email ID", Toast.LENGTH_LONG).show();
                 et5.requestFocus();
@@ -233,19 +237,6 @@ public class AdminActivity extends Activity {
         finish(); */
 
         }
-
-    public Boolean passwordIsValid(String password) {
-
-        Pattern pattern;
-        Matcher matcher;
-
-        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}$";
-
-        pattern = Pattern.compile(PASSWORD_PATTERN);
-        matcher = pattern.matcher(password);
-
-        return matcher.matches();
-    }
 
     private Boolean emailIsValid(String email) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"

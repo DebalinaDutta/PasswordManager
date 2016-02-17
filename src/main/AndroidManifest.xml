@@ -65,7 +65,7 @@
             android:name=".DetailView"
             android:label="@string/title_activity_detail_view"
             android:parentActivityName=".ViewActivity"
-            android:theme="@style/MyFloatingWindow" >
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.debalina.personalpwm.ViewActivity" />

@@ -49,10 +49,10 @@
                     <corners android:radius="50dp" />
                     <gradient
                         android:angle="360"
-                        android:centerColor="#ff8511cc"
+                        android:centerColor="#ff287d16"
                         android:centerY="0.40"
-                        android:endColor="#FF2A86F7"
-                        android:startColor="#C00"
+                        android:endColor="#ff287d16"
+                        android:startColor="#ff287d16"
 
                         />
                 </shape>

@@ -21,6 +21,22 @@ public class validatePassword {
                 PasswordIsValid = true;
             }
         }
+        //if password is 6 byte long, has a uppercase letter, a lowercase letter, a number and a special character
+        if (passwordType == 2) {
+
+                Pattern pattern;
+                Matcher matcher;
+
+                final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}$";
+
+                pattern = Pattern.compile(PASSWORD_PATTERN);
+                matcher = pattern.matcher(passWord);
+
+                if (matcher.matches()) {
+                    PasswordIsValid = true;
+                }
+
+        }
         return PasswordIsValid;
     }
 

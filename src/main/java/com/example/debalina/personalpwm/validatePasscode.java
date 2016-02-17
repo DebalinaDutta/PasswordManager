@@ -91,7 +91,7 @@ public class validatePasscode extends Activity {
                 Toast.makeText(validatePasscode.this, "Invalid Passcode", Toast.LENGTH_SHORT).show();
             }
         }else{
-            Toast.makeText(validatePasscode.this, "Passcode must be of 6 digits", Toast.LENGTH_SHORT).show();
+            Toast.makeText(validatePasscode.this, "Invalid Passcode", Toast.LENGTH_SHORT).show();
         }
 
 

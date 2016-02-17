@@ -157,51 +157,55 @@ public class AddActivity extends Activity {
                 .setTitle("Update entry")
                 .setMessage("Are you sure you want to update this entry?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // continue with update
-                                //
-                                EditText et1 = (EditText) findViewById(R.id.editText1);
-                                String subject = et1.getText().toString();
-                                EditText et2 = (EditText) findViewById(R.id.editText2);
-                                String userid = et2.getText().toString();
-                                EditText et3 = (EditText) findViewById(R.id.editText3);
-                                String pwd = et3.getText().toString();
-                                EditText et4 = (EditText) findViewById(R.id.editText4);
-                                String renewDaysS = et4.getText().toString();
-                                int renewDays = Integer.parseInt(renewDaysS);
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with update
+                        //
+                        EditText et1 = (EditText) findViewById(R.id.editText1);
+                        String subject = et1.getText().toString();
+                        EditText et2 = (EditText) findViewById(R.id.editText2);
+                        String userid = et2.getText().toString();
+                        EditText et3 = (EditText) findViewById(R.id.editText3);
+                        String pwd = et3.getText().toString();
+                        EditText et4 = (EditText) findViewById(R.id.editText4);
+                        String renewDaysS = et4.getText().toString();
+                        int renewDays = Integer.parseInt(renewDaysS);
 
-                                Boolean retainRenewDays = checkIfChecked();
+                        Boolean retainRenewDays = checkIfChecked();
 
-                                DBHandler dbHandler;
-                                Boolean ifNotAllinputgiven = false;
-                                ifNotAllinputgiven = CheckForAllInput(subject, userid, pwd);
+                        DBHandler dbHandler;
+                        Boolean ifNotAllinputgiven = false;
+                        ifNotAllinputgiven = CheckForAllInput(subject, userid, pwd);
 
-                                if (ifNotAllinputgiven) {
-                                    Toast.makeText(getApplicationContext(), "Enter all required input", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    dbHandler = new DBHandler(AddActivity.this, null, null, 1);
+                        if (ifNotAllinputgiven) {
+                            Toast.makeText(getApplicationContext(), "Enter all required input", Toast.LENGTH_SHORT).show();
+                        } else {
+                            dbHandler = new DBHandler(AddActivity.this, null, null, 1);
 
-                                    long result = dbHandler.updateCreds(member, subject, userid, pwd);
-                                    if (result == 999999) {
-                                        Toast.makeText(getApplicationContext(), "USer id & Password exist", Toast.LENGTH_LONG).show();
+                            long result = dbHandler.updateCreds(member, subject, userid, pwd);
+                            if (result == 999998) {
+                                Toast.makeText(getApplicationContext(), "Credential does not exist, Add credential", Toast.LENGTH_LONG).show();
+                            }else{
+                            if (result == 999999) {
+                                Toast.makeText(getApplicationContext(), "USer id & Password exist", Toast.LENGTH_LONG).show();
+                            } else {
+                                String effDate = getCurrentDate();
+                                int parent = dbHandler.getParent(member, subject, userid, pwd);
+
+                                int effect_renewDays = dbHandler.getRenewDays(parent, effDate);
+                                if (!retainRenewDays) {
+                                    if (renewDays == 0) {
+                                        effect_renewDays = 888888;
                                     } else {
-                                        String effDate = getCurrentDate();
-                                        int parent = dbHandler.getParent(member, subject, userid, pwd);
-
-                                        int effect_renewDays = dbHandler.getRenewDays(parent, effDate);
-                                        if (!retainRenewDays) {
-                                            if (renewDays == 0) {
-                                                effect_renewDays = 888888;
-                                            }else{
-                                                effect_renewDays = renewDays;
-                                            }
-                                        }
-                                        dbHandler.addRenew(parent, effDate, effect_renewDays);
-                                        Toast.makeText(getApplicationContext(), "Successfully updated ", Toast.LENGTH_LONG).show();
+                                        effect_renewDays = renewDays;
                                     }
                                 }
+                                dbHandler.addRenew(parent, effDate, effect_renewDays);
+                                Toast.makeText(getApplicationContext(), "Successfully updated ", Toast.LENGTH_LONG).show();
                             }
                         }
+                    }
+                }
+    }
 
                     )
 

@@ -183,18 +183,18 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Boolean checkIfExistsforUpdate (SQLiteDatabase db, String name, String subject, String userid, String pwd) {
 
+        Boolean recExists = false;
         String Query = "Select * from " + TABLE_CREDENTIALS + " where " + COLUMN_NAME + " =  \"" + name + "\"" +
                 " AND " + COLUMN_SUBJECT + " =  \"" + subject + "\"" + " AND " + COLUMN_USERID + " =  \"" + userid + "\""
                 + " AND " + COLUMN_PASSWORD + " =  \"" + pwd + "\"";
         Cursor cursor = db.rawQuery(Query, null);
         if(cursor.getCount() <= 0){
             cursor.close();
-            return false;
         }else{
             cursor.close();
-            return true;
+            recExists = true;
         }
-
+            return recExists;
     }
 
     //delete
@@ -214,8 +214,8 @@ public class DBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             content.setname(cursor.getString(cursor.getColumnIndex("NAME")));
             content.setsubject(cursor.getString(cursor.getColumnIndex("SUBJECT")));
-            db.delete(TABLE_CREDENTIALS, COLUMN_NAME + " = ? AND " + COLUMN_SUBJECT + " = ?" ,
-                    new String[]{String.valueOf(content.getname()),String.valueOf(content.getsubject())});
+            db.delete(TABLE_CREDENTIALS, COLUMN_NAME + " = ? AND " + COLUMN_SUBJECT + " = ?",
+                    new String[]{String.valueOf(content.getname()), String.valueOf(content.getsubject())});
             cursor.close();
             result = true;
         }
@@ -229,21 +229,27 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // check if exists
-        Boolean ifExistsforNoUpdate = false;
+        Boolean ifExists = false;
+        Boolean ifSubjectExists;
         long result;
 
-        ifExistsforNoUpdate = checkIfExistsforUpdate(db, name, subject, userid, password);
-        if (ifExistsforNoUpdate) {
-            result = 999999;
-        } else {
-            ContentValues values = new ContentValues();
-            values.put(COLUMN_USERID, userid);
-            values.put(COLUMN_PASSWORD, password);
+        ifSubjectExists = checkIfSubjectExists(db, name, subject);
+        if(!ifSubjectExists) {
+            result = 999998;
+        }else {
+            ifExists = checkIfExistsforUpdate(db, name, subject, userid, password);
+            if (ifExists) {
+                result = 999999;
+            } else {
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_USERID, userid);
+                values.put(COLUMN_PASSWORD, password);
 
-            long parentID = db.update(TABLE_CREDENTIALS, values, COLUMN_NAME + " = ? AND " + COLUMN_SUBJECT + " = ?",
-                    new String[]{String.valueOf(name), String.valueOf(subject)});
-            db.close();
-            result = parentID;
+                long parentID = db.update(TABLE_CREDENTIALS, values, COLUMN_NAME + " = ? AND " + COLUMN_SUBJECT + " = ?",
+                        new String[]{String.valueOf(name), String.valueOf(subject)});
+                db.close();
+                result = parentID;
+            }
         }
             return result;
     }
@@ -652,17 +658,17 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Boolean checkIfMemberExists (SQLiteDatabase db, String member) {
 
+        Boolean memRecExists = false;
         String Query = "Select * from " + TABLE_ADMIN + " where " + COLUMN_MEMBER + " =  \"" + member + "\"" ;
 
         Cursor cursor = db.rawQuery(Query, null);
         if(cursor.getCount() <= 0){
             cursor.close();
-            return false;
         }else{
             cursor.close();
-            return true;
+            memRecExists = true;
         }
-
+        return memRecExists;
     }
 
     //delete profile
@@ -773,6 +779,22 @@ public class DBHandler extends SQLiteOpenHelper {
         AccountProfile acProf = new AccountProfile(member, userID, password, viewpassword, email);
 
         return acProf;
+    }
+
+    public Boolean checkIfSubjectExists (SQLiteDatabase db, String member, String subject) {
+
+        Boolean subRecExists = false;
+        String Query = "Select * from " + TABLE_CREDENTIALS + " where " + COLUMN_NAME + " =  \"" + member + "\"" +
+        " AND " +   COLUMN_SUBJECT + " =  \"" + subject + "\"";
+
+        Cursor cursor = db.rawQuery(Query, null);
+        if(cursor.getCount() <= 0){
+            cursor.close();
+        }else{
+            cursor.close();
+            subRecExists = true;
+        }
+        return subRecExists;
     }
 
 }

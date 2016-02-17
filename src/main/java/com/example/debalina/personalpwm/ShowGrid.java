@@ -35,6 +35,7 @@ public class ShowGrid extends Activity {
     int ACTIVITY_REQUEST_CODE = 1;
     GridView gridview;
     int posiTion;
+    ArrayList<String> lisT;
 //    ArrayList<String> list = new ArrayList<String>();
 //    ListView listV;
 //    listAdapter dueAdapter;
@@ -200,6 +201,7 @@ public class ShowGrid extends Activity {
                     }
                     String dueItem = subject + ":" + String.valueOf(DaysLeft) + ":" + due;
                     list.add(dueItem);
+                    lisT = list;
 
                 }
             }
@@ -214,18 +216,11 @@ public class ShowGrid extends Activity {
             listV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 // argument position gives the index of item which is clicked
                 public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-                    String due_Item = list.get(position);
-                    StringTokenizer tokens = new StringTokenizer(due_Item, ":");
-                    String subject = tokens.nextToken();
 
-                    DBHandler dbhandler = new DBHandler(ShowGrid.this, null, null, 1);
-                    ArrayList<ContentData> listItem = dbhandler.findcredsWithSub(member, subject);
-                    ContentData credObject = listItem.get(0);
-                    Intent intent = new Intent(ShowGrid.this, DetailView.class);
-
-                    intent.putExtra("Credentials", credObject);
-                    startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
-//                startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
+                    posiTion = position;
+                    Intent intent = new Intent(ShowGrid.this, validatePasscode.class);
+                    intent.putExtra("result", member);
+                    startActivityForResult(intent, 3);
 
                 }
             });
@@ -262,20 +257,21 @@ public class ShowGrid extends Activity {
                 //Write your code if there's no result
             }
         }
-/*        if (requestCode == 3) {
+         if (requestCode == 3) {
             if (resultCode == Activity.RESULT_OK) {
                 String member = data.getStringExtra("result");
-                Toast.makeText(ShowGrid.this, "Taking to History screen", Toast.LENGTH_SHORT).show();
-                View iv = gridview.getChildAt(posiTion);
-                iv.setTransitionName("test");
-                final Intent intent = new Intent(ShowGrid.this, tableView.class);
-                //                       ActivityOptions  option = ActivityOptions.makeSceneTransitionAnimation(ShowGrid.this);
-                ActivityOptions option = ActivityOptions.makeSceneTransitionAnimation(ShowGrid.this, iv, "test");
-                if (member == null) {
-                    member = memcas.getmember();
-                }
-                intent.putExtra("member", member);
-                startActivity(intent, option.toBundle());
+                String due_Item = lisT.get(posiTion);
+                    StringTokenizer tokens = new StringTokenizer(due_Item, ":");
+                    String subject = tokens.nextToken();
+
+                    DBHandler dbhandler = new DBHandler(ShowGrid.this, null, null, 1);
+                    ArrayList<ContentData> listItem = dbhandler.findcredsWithSub(member, subject);
+                    ContentData credObject = listItem.get(0);
+                    Intent intent1 = new Intent(ShowGrid.this, DetailView.class);
+
+                    intent1.putExtra("Credentials", credObject);
+                    startActivityForResult(intent1, ACTIVITY_REQUEST_CODE);
+//                startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
